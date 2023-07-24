@@ -5,7 +5,7 @@ tmp_dir = "/tmp"
 [build]
   args_bin = []
   bin = "/tmp/myapp"
-  cmd = "go build -o /tmp/myapp ."
+  cmd = "go build -gcflags 'all=-N -l' -buildvcs=false -o /tmp/myapp ."
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
