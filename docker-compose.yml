@@ -5,11 +5,33 @@ services:
     build:
       context: .
       dockerfile: etc/dev/Dockerfile
+      args:
+        - UID=$UID
     volumes:
-      - .:/home/dev/app
+      - code:/home/dev/app
       - devhome:/home/dev
     ports:
       - "1323:1323"
       - "2345:2345"
+
 volumes:
   devhome:
+  code:
+
+x-mutagen:
+  sync:
+    defaults:
+      ignore:
+        vcs: true
+      mode: two-way-resolved
+      permissions:
+        defaultOwner: "id:$UID"
+        defaultFileMode: 0644
+        defaultDirectoryMode: 0755
+    code:
+      alpha: "."
+      beta: "volume://code"
+  forward:
+    app:
+      source: "tcp:0.0.0.0:1323"
+      destination: "network://default:tcp:app:1323"
